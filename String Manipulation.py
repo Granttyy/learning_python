@@ -1,23 +1,36 @@
-text = 'Hello Zaira'
-custom_key = 'python'
+text = 'vefwowj'
+custom_key = 'password'
 
-def vigenere(message, key):
+def vigenere(message, key, direction=1):
     key_index = 0
     alphabet = 'abcdefghijklmnopqrstuvwxyz'
-    encrypted_text = ''
+    final_message = ''
 
     for char in message.lower():
-        # Append space to the message
-        if char == ' ':
-            encrypted_text += char
-        else:
-            
-            key_char = key[key_index % len(key)]
-            index = alphabet.find(char)
-            new_index = (index + offset) % len(alphabet)
-            encrypted_text += alphabet[new_index]
-    print('plain text:', message)
-    print('encrypted text:', encrypted_text)
 
-vigenere(text, custom_key)
-# The code above is a simple implementation of the Vigenère cipher, which is a method of encrypting alphabetic text by using a simple form of polyalphabetic substitution. The key is repeated to match the length of the message, and each letter in the message is shifted by the corresponding letter in the key. The code also handles spaces in the message.
+        # Append any non-letter character to the message
+        if not char.isalpha():
+            final_message += char
+        else:        
+            # Find the right key character to encode/decode
+            key_char = key[key_index % len(key)]
+            key_index += 1
+
+            # Define the offset and the encrypted/decrypted letter
+            offset = alphabet.index(key_char)
+            index = alphabet.find(char)
+            new_index = (index + offset*direction) % len(alphabet)
+            final_message += alphabet[new_index]
+    
+    return final_message
+
+def encrypt(message, key):
+    return vigenere(message, key)
+    
+def decrypt(message, key):
+    return vigenere(message, key, -1)
+
+print(f'\nEncrypted text: {text}')
+print(f'Key: {custom_key}')
+decryption = decrypt(text, custom_key)
+print(f'\nDecrypted text: {decryption}\n')
